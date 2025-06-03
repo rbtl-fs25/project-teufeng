@@ -1,0 +1,19 @@
+variable_name,description
+date,Date when the survey or observation was conducted
+time,Time of day when the data was recorded
+weekday,Day of the week when the data was collected
+id,Unique identifier for each participant or entry
+age,Age of the respondent in years
+gender,Gender of the respondent
+education_level,Highest level of education completed by the respondent
+environmental_responsibility,Self-reported level of personal responsibility towards the environment
+returns_count,Number of times the respondent has returned used batteries for recycling in the last 6 months
+disposal_location,Usual location where the respondent disposes of batteries 
+disposal_distance,Distance from home to disposal location in meters
+measure_type,Type of measure to be implemented to improve recycling rates
+measure_rating,Rating score given by the respondent for the measure_type 
+battery_fires_knowledge,Respondent’s knowledge about battery fire risks
+has_read_fire_text,Whether the respondent has read a specific text on battery fire safety (yes/no)
+second_education_rating_after_reading,Rating of perceived educational value of the text after reading it
+importance_estimate_type,"Type of topic the respondent rated as important (e.g., environment, safety)"
+importance_estimate_rating,Respondent’s rating of importance for the given topic 

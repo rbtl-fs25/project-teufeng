@@ -1,0 +1,36 @@
+id,disposal_location,disposal_distance,distance_incentive_rating
+1,Electronic waste collection point,300,5
+2,"Designated battery bin at Coop, Migros, Denner or Kkiosk",500,3
+3,"Designated battery bin at Coop, Migros, Denner or Kkiosk",5,2
+4,Other,0,5
+5,Electronic waste collection point,200,1
+6,"Designated battery bin at Coop, Migros, Denner or Kkiosk",1000,4
+7,"Designated battery bin at Coop, Migros, Denner or Kkiosk",100,3
+8,"Designated battery bin at Coop, Migros, Denner or Kkiosk",2000,2
+9,Regular trash,0,2
+10,Electronic waste collection point,100,4
+11,"Designated battery bin at Coop, Migros, Denner or Kkiosk",300,1
+12,"Designated battery bin at Coop, Migros, Denner or Kkiosk",50,2
+13,"Designated battery bin at Coop, Migros, Denner or Kkiosk",300,2
+14,"Designated battery bin at Coop, Migros, Denner or Kkiosk",50,5
+15,Other,500,5
+16,"Designated battery bin at Coop, Migros, Denner or Kkiosk",300,4
+17,Electronic waste collection point,1000,3
+18,Electronic waste collection point,100,2
+19,"Designated battery bin at Coop, Migros, Denner or Kkiosk",30,2
+20,"Designated battery bin at Coop, Migros, Denner or Kkiosk",1000,5
+21,"Designated battery bin at Coop, Migros, Denner or Kkiosk",100,4
+22,"Designated battery bin at Coop, Migros, Denner or Kkiosk",100,4
+23,"Designated battery bin at Coop, Migros, Denner or Kkiosk",1200,3
+24,"Designated battery bin at Coop, Migros, Denner or Kkiosk",50,1
+25,"Designated battery bin at Coop, Migros, Denner or Kkiosk",150,4
+26,"Designated battery bin at Coop, Migros, Denner or Kkiosk",500,3
+27,"Designated battery bin at Coop, Migros, Denner or Kkiosk",350,5
+28,"Designated battery bin at Coop, Migros, Denner or Kkiosk",1500,2
+29,"Designated battery bin at Coop, Migros, Denner or Kkiosk",200,2
+30,Regular trash,500,4
+31,"Designated battery bin at Coop, Migros, Denner or Kkiosk",300,4
+32,"Designated battery bin at Coop, Migros, Denner or Kkiosk",100,5
+33,"Designated battery bin at Coop, Migros, Denner or Kkiosk",0,1
+34,Other,500,3
+35,"Designated battery bin at Coop, Migros, Denner or Kkiosk",250,1

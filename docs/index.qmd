@@ -9,41 +9,30 @@ author:
     affiliation:
       - name: ETH Zurich
         url: https://ethz.ch/de.html
-# abstract:
-#   "Abstract."
-# license: "CC BY"
+
+license: "CC BY"
 # citation: 
-#   container-title: Research Beyond the Lab
+container-title: Research Beyond the Lab
 #  url: https://www.example.com # insert website link here
 bibliography: bibliography.bib
-#csl: apa.csl  # other csls https://github.com/citation-style-language/styles
 csl: apa.csl
 format:
-#  docx: default
   html:
-    toc: true
-    toc-depth: 4
-    toc-expand: true
-    embed-resources: true
-#    fig-width: 6  
-#    fig-asp: 0.618    # the golden ratio, only adjust fig-asp in chunks where needed
-#    fig-align: center
-#    out-width: "70%"
+    code-fold: true
 ---
 
 ```{r}
-#| echo: false
-#| results: false
-#| output: false
+#| include: false
 
 library(tidyverse)
 library(ggplot2)
 library(ggridges)
 library(ggthemes)
+library(googlesheets4)
+library(lubridate)
 
 #get data
-tidydata <- read_rds(here::here("data/processed/battery_recycling_incentive_survey_processed_responses_long.rds"))
-tidydata_wide <- read_rds(here::here("data/processed/battery_recycling_incentive_survey_processed_responses_wide.rds"))
+tidydata <- read_rds(here::here("data/processed/battery_recycling_incentive_survey_processed_responses.rds"))
 ```
 
 # Battery Recycling
@@ -58,7 +47,7 @@ A survey was conducted to gather information on the respondents demographics and
 
 ## Results
 
-Figures and tables in Results section are interpreted with 2 to 3 sentences each; interpretation goes beyond summarising what is presented and provides context and insight.
+Figures and tables in Results section are interpreted with 2 to 3 sentences each; interpretation goes beyond summarizing what is presented and provides context and insight.
 
 -   Introducing a deposit of CHF 0.50 per battery
 
@@ -71,53 +60,122 @@ Figures and tables in Results section are interpreted with 2 to 3 sentences each
 ### Rating of Measures
 
 ```{r}
-#| label: incentive_ratings
-#| fig-cap: "The rating of the four proposed measures"
-tidydata |> 
+#| label: fig-incentive-ratings
+#| fig-cap: "The rating of the four proposed measures to increase recycling rates"
+#| warning: false
+
+#summarise important cols and only use distinct rows
+tidydata_summarized <- tidydata |> 
+  summarise(id, measure_type,
+            measure_rating) |> 
+  distinct()
+
+tidydata_summarized |> 
   ggplot(mapping = aes(x = measure_type,
                      y = measure_rating,
                      fill = measure_type)) +
   geom_boxplot(outlier.shape = NA) +
   scale_x_discrete(labels = c("deposit", "proximity", "education", "removability")) +
-  scale_fill_discrete(labels = c("deposit", "proximity", "education", "removability"))+
-  labs(
-    x = "Type of Measure", 
-    y = "Rating")
+  scale_fill_discrete(labels = c("deposit", "proximity", "education", "removability")) +
+  labs(x = "Type of Measure", y = "Rating")
+```
 
+```{r}
+#| include: false
+
+write_csv(tidydata_summarized, here::here("data/final/incentive_ratings.csv"))
+```
+
+In @fig-incentive-ratings the support for the various proposed measures can be seen. The most popular choice was to make all batteries removable. This might be connected to the recent public discussion about e-cigarettes and vapes, which famously were allowed to make their batteries non-removeable. The proximity measure was rated the least. Probably because most people dispose of their batteries in supermarkets, where they go to anyways, as can be seen in @fig-disposal_location_education.
+
+```{r}
+#| label: fig-disposal_location_education
+#| fig-cap: "The distribution of where people dispose of their batteries."
+#| warning: false
+
+edulocation <- tidydata |> 
+  summarise(id,
+            disposal_location,
+            education_level) |> 
+  distinct() |> 
+  mutate(disposal_location = recode(disposal_location, "Designated battery bin at Coop, Migros, Denner or Kkiosk" = "Supermarket")) |> 
+  mutate(disposal_location = recode(disposal_location, "Electronic waste collection point" = "E-waste site"))
+  
+edulocation$education_level <- as.character(edulocation$education_level)
+
+
+edulocation |>
+  ggplot(mapping = aes(x = reorder(disposal_location, disposal_location, length), 
+                       fill = education_level)) +
+  geom_bar() +
+  coord_flip() +
+  #scale_y_continuous(breaks = seq(from = 0, to = 100, by = 2)) +
+  labs(x = "Disposal location",
+       y = "Number of responses (total: 35)",
+       fill = "Level of education") +
+  theme_minimal() +
+  scale_fill_colorblind()
+```
+
+```{r}
+#| include: false
+
+write_csv(edulocation, here::here("data/final/disposal_location_education.csv"))
 ```
 
 ### Rating of education campaign before & after information
 
 and previous fire knowledge
 
-```{r}
-```
-
-## 
-
 ### Correlation current walking distance to proximity measure rating
 
 ```{r}
+#| label: location-proximity-incentive
+#| fig-cap: "Correlation between walking distance and proximity incentive rating"
+#| warning: false
+
+#pivot measure ratings
+tidydata_wide <- tidydata |> 
+  pivot_wider(names_from = measure_type,
+              values_from = measure_rating) |> 
+  summarise(id, disposal_location, disposal_distance, distance_incentive_rating) |> 
+  distinct()
+  
+
 tidydata_wide |> 
   ggplot(aes(x = disposal_distance, y = distance_incentive_rating, color = disposal_location)) +
   geom_point(alpha = 1, size = 3) +
   scale_color_colorblind() +
-  labs(
-    x = "Disposal Point Distance",
-    y = "Proximity Incentive Rating",
-    color = "Disposal Location",
-    caption = "Correlation between walking distance and proximity incentive rating"
-  )
+  labs(x = "Disposal Point Distance",
+       y = "Proximity Incentive Rating",
+       color = "Disposal Location")
 
 ```
 
 ```{r}
+#| include: false
+
+write_csv(tidydata_wide, here::here("data/final/location_proximity_incentive.csv"))
+```
+
+### Another plot
+
+```{r}
+#| warning: false
 tidydata |> 
   ggplot(mapping = aes(x = disposal_distance, fill = disposal_location)) +
   geom_histogram() +
   facet_grid(disposal_location ~ battery_fires_knowledge, scales = "free_y") +
   scale_fill_colorblind() +
   theme(legend.position = "none")
+```
+
+```{r}
+#| echo: false
+#| results: false
+#| output: false
+
+
 ```
 
 ## Conclusions

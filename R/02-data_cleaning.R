@@ -59,9 +59,6 @@ tidydata <- tidydata |>
   relocate(date) |> 
   select(!Timestamp) # remove old timestamp variable
 
-#save wide version
-tidydata_wide <- tidydata 
-
 #pivot measure ratings
 tidydata <- tidydata |> 
   pivot_longer(cols = deposit_incentive_rating:removable_incentive_rating, names_to = "measure_type", values_to = "measure_rating")
@@ -76,8 +73,6 @@ tidydata <- tidydata |>
   pivot_longer(cols = injury_estimate:material_losses_estimate, names_to = "importance_estimate_type", values_to = "importance_estimate_rating")
 
 #save files in processed folder
-write_csv(tidydata, "data/processed/battery_recycling_incentive_survey_processed_responses_long.csv")
-write_rds(tidydata, "data/processed/battery_recycling_incentive_survey_processed_responses_long.rds")
-write_csv(tidydata_wide, "data/processed/battery_recycling_incentive_survey_processed_responses_wide.csv")
-write_rds(tidydata_wide, "data/processed/battery_recycling_incentive_survey_processed_responses_wide.rds")
-           
+write_csv(tidydata, "data/processed/battery_recycling_incentive_survey_processed_responses.csv")
+write_rds(tidydata, "data/processed/battery_recycling_incentive_survey_processed_responses.rds")
+
