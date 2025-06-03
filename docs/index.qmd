@@ -1,0 +1,129 @@
+---
+title: "Battery Recycling"
+subtitle: "How can we increase recycling rates"
+date: today
+author:
+  - name: "Gian Teufen"
+    orcid: 0009-0002-9355-3503
+    email: teufeng@ethz.ch
+    affiliation:
+      - name: ETH Zurich
+        url: https://ethz.ch/de.html
+# abstract:
+#   "Abstract."
+# license: "CC BY"
+# citation: 
+#   container-title: Research Beyond the Lab
+#  url: https://www.example.com # insert website link here
+bibliography: bibliography.bib
+#csl: apa.csl  # other csls https://github.com/citation-style-language/styles
+csl: apa.csl
+format:
+#  docx: default
+  html:
+    toc: true
+    toc-depth: 4
+    toc-expand: true
+    embed-resources: true
+#    fig-width: 6  
+#    fig-asp: 0.618    # the golden ratio, only adjust fig-asp in chunks where needed
+#    fig-align: center
+#    out-width: "70%"
+---
+
+```{r}
+#| echo: false
+#| results: false
+#| output: false
+
+library(tidyverse)
+library(ggplot2)
+library(ggridges)
+library(ggthemes)
+
+#get data
+tidydata <- read_rds(here::here("data/processed/battery_recycling_incentive_survey_processed_responses_long.rds"))
+tidydata_wide <- read_rds(here::here("data/processed/battery_recycling_incentive_survey_processed_responses_wide.rds"))
+```
+
+# Battery Recycling
+
+## Introduction
+
+Because Batteries contain some toxic and valuable components that are even considered critical materials, proper recycling is crucial @2023recycling. Switzerland is the world's No.1 recycling country with an 80% recycling rate of portable batteries @inobat. The government has taken various measures in the past to increase recyling rates. For example they made the separate disposal of used batteries at designated collection points mandatory, the free-of-charge collection of used batteries from any battery consumer is obligatory for any point of sale and public education campaigns were conducted @2006justifications @2009characteristics. Now the question remains of what measures to implement next.
+
+## Methods
+
+A survey was conducted to gather information on the respondents demographics and current recycling behavior, then four different measures were proposed and the respondents were asked to rate each measure on a Likert scale from 1 to 5. They were asked to rate the option "Education campaign" before and after reading the education content to determine whether their knowledge would influence this result. Their previous knowledge was also tested by letting them rate the significance of various consequences of improper battery recycling on a Likert scale.
+
+## Results
+
+Figures and tables in Results section are interpreted with 2 to 3 sentences each; interpretation goes beyond summarising what is presented and provides context and insight.
+
+-   Introducing a deposit of CHF 0.50 per battery
+
+-   Halving the distance to your next collection point.
+
+-   Education campaigns about the consequences of improper disposal.
+
+-   Batteries can be removed from all devices without tools.
+
+### Rating of Measures
+
+```{r}
+#| label: incentive_ratings
+#| fig-cap: "The rating of the four proposed measures"
+tidydata |> 
+  ggplot(mapping = aes(x = measure_type,
+                     y = measure_rating,
+                     fill = measure_type)) +
+  geom_boxplot(outlier.shape = NA) +
+  scale_x_discrete(labels = c("deposit", "proximity", "education", "removability")) +
+  scale_fill_discrete(labels = c("deposit", "proximity", "education", "removability"))+
+  labs(
+    x = "Type of Measure", 
+    y = "Rating")
+
+```
+
+### Rating of education campaign before & after information
+
+and previous fire knowledge
+
+```{r}
+```
+
+## 
+
+### Correlation current walking distance to proximity measure rating
+
+```{r}
+tidydata_wide |> 
+  ggplot(aes(x = disposal_distance, y = distance_incentive_rating, color = disposal_location)) +
+  geom_point(alpha = 1, size = 3) +
+  scale_color_colorblind() +
+  labs(
+    x = "Disposal Point Distance",
+    y = "Proximity Incentive Rating",
+    color = "Disposal Location",
+    caption = "Correlation between walking distance and proximity incentive rating"
+  )
+
+```
+
+```{r}
+tidydata |> 
+  ggplot(mapping = aes(x = disposal_distance, fill = disposal_location)) +
+  geom_histogram() +
+  facet_grid(disposal_location ~ battery_fires_knowledge, scales = "free_y") +
+  scale_fill_colorblind() +
+  theme(legend.position = "none")
+```
+
+## Conclusions
+
+Conclusions concisely summarize findings in a bullet point format.
+
+```{r}
+
+```
