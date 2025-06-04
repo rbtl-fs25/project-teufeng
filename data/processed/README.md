@@ -15,16 +15,14 @@
 
 3.  Date of data collection (13/05/25 - 30/05/25):
 
-4.  Geographic location of data collection: Zürich
+4.  Geographic location of data collection: Zürich, Switzerland
 
 5.  Information about funding sources that supported the collection of
     the data: none
 
 ## Sharing / access information
 
-1.  Licenses/restrictions placed on the data:  none
-
-Recommended: This work is licensed under the Creative Commons Attribution 4.0 International license (CC-BY-4.0).
+1.  Licenses/restrictions placed on the data:  This work is licensed under the Creative Commons Attribution 4.0 International license (CC-BY-4.0).
 
 2.  Links to publications that cite or use the data: none
 

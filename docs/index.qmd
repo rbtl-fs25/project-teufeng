@@ -19,6 +19,7 @@ csl: apa.csl
 format:
   html:
     code-fold: true
+    toc: true
 ---
 
 ```{r}
@@ -30,6 +31,7 @@ library(ggridges)
 library(ggthemes)
 library(googlesheets4)
 library(lubridate)
+library(gt)
 
 #get data
 tidydata <- read_rds(here::here("data/processed/battery_recycling_incentive_survey_processed_responses.rds"))
@@ -39,7 +41,7 @@ tidydata <- read_rds(here::here("data/processed/battery_recycling_incentive_surv
 
 ## Introduction
 
-Because Batteries contain some toxic and valuable components that are even considered critical materials, proper recycling is crucial @2023recycling. Switzerland is the world's No.1 recycling country with an 80% recycling rate of portable batteries @inobat. The government has taken various measures in the past to increase recyling rates. For example they made the separate disposal of used batteries at designated collection points mandatory, the free-of-charge collection of used batteries from any battery consumer is obligatory for any point of sale and public education campaigns were conducted @2006justifications @2009characteristics. Now the question remains of what measures to implement next.
+Because Batteries contain some toxic and valuable components that are even considered critical materials, proper recycling is crucial @2023recycling. Switzerland is the world's No.1 recycling country with an 80% recycling rate of portable batteries, according to @inobat. The government has taken various measures in the past to increase recyling rates. For example they made the separate disposal of used batteries at designated collection points mandatory, the free-of-charge collection of used batteries from any battery consumer is obligatory for any point of sale and public education campaigns were conducted @2006justifications @2009characteristics. Now the question remains of what measures to implement next.
 
 ## Methods
 
@@ -86,7 +88,7 @@ tidydata_summarized |>
 write_csv(tidydata_summarized, here::here("data/final/incentive_ratings.csv"))
 ```
 
-In @fig-incentive-ratings the support for the various proposed measures can be seen. The most popular choice was to make all batteries removable. This might be connected to the recent public discussion about e-cigarettes and vapes, which famously were allowed to make their batteries non-removeable. The proximity measure was rated the least. Probably because most people dispose of their batteries in supermarkets, where they go to anyways, as can be seen in @fig-disposal_location_education.
+In @fig-incentive-ratings the support for the various proposed measures can be seen. The most popular choice was to make all batteries removable. This might be connected to the recent public discussion about e-cigarettes and vapes, which famously were allowed to make their batteries non-removeable. The proximity measure was rated the least. This might be because most people dispose of their batteries in supermarkets, where they go to anyways, as can be seen in @fig-disposal_location_education. This figure also shows that people of various levels of education took part in the survey. But it does not show any correlation of this to where they dispose of their batteries.
 
 ```{r}
 #| label: fig-disposal_location_education
@@ -123,14 +125,12 @@ edulocation |>
 write_csv(edulocation, here::here("data/final/disposal_location_education.csv"))
 ```
 
-### Rating of education campaign before & after information
-
-and previous fire knowledge
-
 ### Correlation current walking distance to proximity measure rating
 
+Another explanation for the low rating of the proximity measure could have been because the people that were interviewed live less than the nationwide average of 500 meters from their disposal site already, as shown in @fig-location-proximity-incentive. But this figure also shows no correlation of people rating the measure higher if they live further away.
+
 ```{r}
-#| label: location-proximity-incentive
+#| label: fig-location-proximity-incentive
 #| fig-cap: "Correlation between walking distance and proximity incentive rating"
 #| warning: false
 
@@ -158,30 +158,53 @@ tidydata_wide |>
 write_csv(tidydata_wide, here::here("data/final/location_proximity_incentive.csv"))
 ```
 
-### Another plot
+### Importance of Implications
+
+@tbl-implication-importance-ratings lists how important people perceived various implications of non-recycling to be. They mostly name environmental pollution and the loss of critical materials as being the worst consequences.
 
 ```{r}
+#| label: tbl-implication-importance-ratings
 #| warning: false
-tidydata |> 
-  ggplot(mapping = aes(x = disposal_distance, fill = disposal_location)) +
-  geom_histogram() +
-  facet_grid(disposal_location ~ battery_fires_knowledge, scales = "free_y") +
-  scale_fill_colorblind() +
-  theme(legend.position = "none")
+#| tbl-cap: "Perceived importance of non-recycling implications"
+
+tbldata <- tidydata |>
+  summarise(id,
+            importance_estimate_type,
+            importance_estimate_rating) |> 
+  distinct() |> 
+  group_by(importance_estimate_type) |>
+  summarise(n = n(),
+            mean = mean(importance_estimate_rating),
+            median = median(importance_estimate_rating),
+            sd = sd(importance_estimate_rating)) 
+
+tbldata |> 
+  gt() |> 
+  fmt_number(columns = c(mean,sd,median),
+             decimals = 1) |> 
+  opt_stylize(style = 1)
 ```
 
 ```{r}
-#| echo: false
-#| results: false
-#| output: false
+#| include: false
 
-
+write_csv(tbldata, here::here("data/final/implication_importance_ratings.csv"))
 ```
 
 ## Conclusions
 
-Conclusions concisely summarize findings in a bullet point format.
+-   Removable batteries was perceived as the best measure, likely due to public concern over sealed devices like e-cigarettes.
 
-```{r}
+-   Proximity incentives were least favored, as most people already use convenient locations like supermarkets.
 
+```{=html}
+<!-- -->
 ```
+-   No link was found between distance tof disposal sites and support for proximity incentives.
+
+```{=html}
+<!-- -->
+```
+-   Environmental harm and material loss were seen as the most serious risks of improper disposal.
+
+## References
