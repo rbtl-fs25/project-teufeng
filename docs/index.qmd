@@ -11,9 +11,7 @@ author:
         url: https://ethz.ch/de.html
 
 license: "CC BY"
-# citation: 
 container-title: Research Beyond the Lab
-#  url: https://www.example.com # insert website link here
 bibliography: bibliography.bib
 csl: apa.csl
 format:
@@ -197,14 +195,12 @@ write_csv(tbldata, here::here("data/final/implication_importance_ratings.csv"))
 
 -   Proximity incentives were least favored, as most people already use convenient locations like supermarkets.
 
-```{=html}
 <!-- -->
-```
+
 -   No link was found between distance tof disposal sites and support for proximity incentives.
 
-```{=html}
 <!-- -->
-```
+
 -   Environmental harm and material loss were seen as the most serious risks of improper disposal.
 
 ## References
